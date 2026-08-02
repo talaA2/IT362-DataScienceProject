@@ -136,7 +136,4 @@ My contributions included:
 
 ---
 
-## 📌 Key Takeaways
 
-- Real-world sentiment analysis datasets are naturally noisy and imbalanced.
-- Choosing appropriate evaluation metrics is as important as selecting the model itself.
