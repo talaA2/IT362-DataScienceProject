@@ -117,6 +117,29 @@ Since the dataset is imbalanced, Macro F1-score was selected as the primary eval
 
 ---
 
+## Extension: Fine-tuning BERT (added after the course)
+
+After the course, I extended the project by fine-tuning **BERT** (`bert-base-uncased`), a pre-trained language model that reads each word in the context of the whole sentence, instead of counting words like TF-IDF.
+
+To keep the comparison fair, BERT used the **same 3,891 texts, the same test set, the same class weighting and the same main metric** as the models above. 10% of the training data was held out to choose the best training epoch, so the test set was only used for the final score. BERT was trained 3 times with different random seeds.
+
+| Model | Macro F1 (test set) | Accuracy (test set) | F1 negative | F1 neutral | F1 positive |
+|---|:---:|:---:|:---:|:---:|:---:|
+| **BERT** (mean of 3 runs) | **0.713 ± 0.008** | **75.4%** | **0.821** | **0.706** | **0.612** |
+| SVM (best Phase 3 model) | 0.669 | 72.3% | 0.805 | 0.595 | 0.608 |
+
+![BERT compared with the Phase 3 models](docs/bert_comparison.png)
+
+**What changed**
+- **BERT improved Macro F1 by 0.044** over the best classical model, and every one of the 3 runs beat it (0.702 to 0.719).
+- **Most of the gain is on neutral texts** (F1 0.595 → 0.706). Reading words in context helps separate neutral comments from negative ones.
+- **Positive texts remain the hardest class** (F1 ≈ 0.61 for both models).
+- **Trade-off:** BERT needs a GPU (about 2 minutes per training epoch on a free Colab T4), while SVM trains in seconds on a laptop.
+
+Notebook: [`Extension/BERT_Fine_Tuning.ipynb`](Extension/BERT_Fine_Tuning.ipynb)
+
+---
+
 ## Technologies Used
 
 - Python
@@ -127,6 +150,7 @@ Since the dataset is imbalanced, Macro F1-score was selected as the primary eval
 - spaCy
 - Matplotlib
 - Seaborn
+- PyTorch and Hugging Face Transformers (BERT extension)
 - Google Colab
 
 ---
@@ -145,6 +169,7 @@ Since the dataset is imbalanced, Macro F1-score was selected as the primary eval
 │   ├── labeled data files/                      ← data used for training
 │   ├── Summary of results/                      ← test-set predictions
 │   └── IT362_Project_Report.pdf, project posters
+├── Extension/ BERT_Fine_Tuning.ipynb   ← fine-tuned BERT, added after the course
 └── docs/      Figures used in this README
 ```
 
@@ -160,6 +185,7 @@ jupyter notebook "Phase 3/Notebooks/Compare_Models_and_Selection.ipynb"
 ```
 
 The data collection notebooks in Phase 1 need your own YouTube Data API and GNews API keys.
+The BERT notebook needs a GPU: open it in Colab and choose **Runtime → Change runtime type → T4 GPU**.
 
 > **Note:** the PDF reports are the original course submissions. The Phase 3 notebooks were later updated so that every model uses the same data split, so a few numbers may differ slightly from the reports.
 
